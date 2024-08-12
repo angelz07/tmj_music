@@ -41,10 +41,38 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   AudioPlayer audioPlayer = AudioPlayer();
   bool isPlaying = false;
-  String url = "https://bbeamradio.ice.infomaniak.ch/bbeamradio-128.aac";
+  bool isStreamAvailable = false;
+  //String url = "https://bbeamradio.ice.infomaniak.ch/bbeamradio-128.aac";
+  String url = "https://www2.cs.uic.edu/~i101/SoundFiles/CantinaBand60.wav";
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    checkStreamAvailability();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && !isPlaying) {
+      checkStreamAvailability();
+    }
+  }
+
+  void checkStreamAvailability() async {
+    bool streamActive = await isStreamActive();
+    setState(() {
+      isStreamAvailable = streamActive;
+    });
+  }
 
   void playPause() async {
     if (isPlaying) {
@@ -53,11 +81,10 @@ class _MyHomePageState extends State<MyHomePage> {
       });
       audioPlayer.pause();
     } else {
-      if (await isStreamActive()) {
+      if (isStreamAvailable) {
         setState(() {
           isPlaying = true;
         });
-        
         await audioPlayer.play(UrlSource(url));
       } else {
         if (mounted) {
@@ -107,14 +134,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   String getNextLiveMessage() {
+    if (isStreamAvailable) {
+      return "Live en cours!";
+    }
+
     final now = DateTime.now();
     final brusselsTime = now.toUtc().add(const Duration(hours: 2));
     final weekday = brusselsTime.weekday;
     final hour = brusselsTime.hour;
-
-    if (isBroadcastingTime()) {
-      return "Live en cours!";
-    }
 
     DateTime nextLive;
     if (weekday == DateTime.monday || (weekday == DateTime.tuesday && hour >= 20)) {
@@ -129,19 +156,6 @@ class _MyHomePageState extends State<MyHomePage> {
     final timeFormat = DateFormat('HH:mm', 'fr_FR');
 
     return "Prochain live le ${dayFormat.format(nextLive)} à ${timeFormat.format(nextLive)}";
-  }
-
-  bool isBroadcastingTime() {
-    final now = DateTime.now();
-    final brusselsTime = now.toUtc().add(const Duration(hours: 2));
-    final weekday = brusselsTime.weekday;
-    final hour = brusselsTime.hour;
-
-    if ((weekday == DateTime.tuesday || weekday == DateTime.thursday) &&
-        (hour >= 17 && hour < 20)) {
-      return true;
-    }
-    return false;
   }
 
   @override
@@ -244,4 +258,3 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 }
- 
