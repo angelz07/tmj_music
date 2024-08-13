@@ -15,8 +15,12 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
+    //kotlinOptions {
+    //    jvmTarget = JavaVersion.VERSION_1_8
+    //}
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
+        jvmTarget = "1.8"
+        freeCompilerArgs += "-Xdisable-incremental-compilation"
     }
 
     defaultConfig {
@@ -45,4 +49,13 @@ android {
 
 flutter {
     source = "../.."
+}
+
+configurations.all {
+    resolutionStrategy.eachDependency { details ->
+        if (details.requested.group == 'org.jetbrains.kotlin') {
+            details.useVersion '1.8.0'
+            details.because "Forcing Kotlin version to 1.8.0 for compatibility"
+        }
+    }
 }

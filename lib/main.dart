@@ -1,3 +1,10 @@
+
+void main() async {
+ 
+}
+
+
+/*
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:http/http.dart' as http;
@@ -45,8 +52,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   AudioPlayer audioPlayer = AudioPlayer();
   bool isPlaying = false;
   bool isStreamAvailable = false;
-  //String url = "https://bbeamradio.ice.infomaniak.ch/bbeamradio-128.aac";
-  String url = "https://www2.cs.uic.edu/~i101/SoundFiles/CantinaBand60.wav";
+  String url = "https://bbeamradio.ice.infomaniak.ch/bbeamradio-128.aac";
+  //String url = "https://www2.cs.uic.edu/~i101/SoundFiles/CantinaBand60.wav";
   @override
   void initState() {
     super.initState();
@@ -225,18 +232,14 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   icon: const Icon(Icons.facebook),
                   color: const Color(0xFF00AFFF),
                   iconSize: 40.0,
-                  onPressed: () {
-                    _launchURL('https://www.facebook.com/profile.php?id=61558322909738');
-                  },
+                  onPressed: _launchFacebook,
                 ),
                 const SizedBox(width: 20.0),
                 IconButton(
                   icon: const Icon(Icons.public),
                   color: const Color(0xFF00AFFF),
                   iconSize: 40.0,
-                  onPressed: () {
-                    _launchURL('https://www.tmj-music.be/');
-                  },
+                  onPressed: _launchWebsite,
                 ),
               ],
             ),
@@ -257,4 +260,28 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       throw 'Could not launch $urlString';
     }
   }
+
+  void _launchFacebook() async {
+    final Uri facebookAppUrl = Uri.parse("fb://profile/61558322909738");
+    final Uri facebookWebUrl = Uri.parse("https://www.facebook.com/profile.php?id=61558322909738");
+
+    if (await canLaunchUrl(facebookAppUrl)) {
+      await launchUrl(facebookAppUrl, mode: LaunchMode.externalApplication);
+    } else {
+      await launchUrl(facebookWebUrl, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  void _launchWebsite() async {
+    final Uri websiteUrl = Uri.parse("https://www.tmj-music.be/");
+    
+    if (await canLaunchUrl(websiteUrl)) {
+      await launchUrl(websiteUrl, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch $websiteUrl';
+    }
+  }
+
+
 }
+*/

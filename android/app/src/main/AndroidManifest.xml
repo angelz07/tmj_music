@@ -1,6 +1,12 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.yourcompany.tmj_music">
+    <!-- Permissions pour la lecture audio en arrière-plan -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
-        android:label="tmj_music"
+        android:label="TMJ Music"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
