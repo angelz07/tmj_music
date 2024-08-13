@@ -1,10 +1,5 @@
 
-void main() async {
- 
-}
 
-
-/*
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:http/http.dart' as http;
@@ -38,7 +33,7 @@ class MyApp extends StatelessWidget {
       ),
       home: const MyHomePage(),
     );
-  }
+  } 
 }
 
 class MyHomePage extends StatefulWidget {
@@ -284,4 +279,3 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
 
 }
-*/
